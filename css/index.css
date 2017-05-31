@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+.header {
+	background-color: #2E4059;
+	height: 150px;
+}
+.nav-bar .col-lg-4 {
+	text-transform: uppercase;
+	color: #C8C8C8;
+	text-align: center;
+	width: 142px;
+	margin-top: 102px;
+	left: 774px;
+	padding-left: 0px;
+	margin-right: -200px;
+	margin-left: 196px;
+}
+.nav-bar .row #navone, .nav-bar .row #navetwo {
+	margin-top: 112px;
+}
+#page-head {
+	text-transform: uppercase;
+	color: #618AC2;
+	margin-left: 52px;
+}
+.main-body {
+	background-color: #DBDBDB;
+	background-size: cover;
+	height: 100vh;
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	position: static;
+}
+.main-body .holder {
+	background-color: #FFFFFF;
+	margin-top: 36px;
+	border-radius: 15px;
+	height: 520px;
+	width: 1165px;
+	margin-left: 50px;
+}
+table {
+	border-collapse: collapse;
+	margin-top: 30px;
+	text-align: left;
+	margin-left: -20px;
+}
+th {
+	text-transform: uppercase;
+	padding-right: 80px;
+}
+td {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 201px;
+}
+.net-worth {
+	padding-left: 225px;
+}
+.monthly-income {
+	padding-left: 210px;
+}
+#monthly-expense {
+	padding-left: 147px;
+}
+#monthly-income {
+	padding-left: 165px;	
+}
+#net-worth {
+	padding-left: 198px;
+}
+a {
+	text-decoration: none;
+	color: #D7D7D7;
+}
+.footer-content {
+	background-color: #DBDBDB;
+	color: #FFFFFF;
+}
+#sitemap a {
+	text-decoration: underline;
+	color: steelblue;
+}
+.content ul {
+	list-style: none;
+	text-align: center;
+	padding-bottom: 0px;
+	padding-top: 0px;
+	line-height: 35px;
+	color: steelblue;
+	margin-top: -90px;
+}
+
