@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transaction</title>
+    <!-- Bootstrap -->
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/transaction.css" rel="stylesheet" type="text/css">
+	
+	<style>
+	html {overflow-x: hidden;}
+	</style>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+  </head>
+  <body>
+  
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="js/jquery-1.11.3.min.js"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed --> 
+	<script src="js/bootstrap.js"></script>
+	
+	    <script type="text/javascript">
+        $(document).ready(function() {
+			
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+
+		var yyyy = today.getFullYear();
+		if(dd<10){
+			dd='0'+dd;
+		} 
+		if(mm<10){
+			mm='0'+mm;
+		} 
+		var today = yyyy + '-' + mm +'-'+dd;
+		document.getElementById("txt-date").defaultValue = today;
+			
+		retrieve();
+			
+		function retrieve() {
+			
+		var transactionHistory = getTransactionHistory();
+
+
+		if (transactionHistory) {
+			var totalIncome = 0;
+			//load back into form
+			for (var i =0; i<transactionHistory.length; i++) {
+			
+			var rand = i;
+			var randomHistory = transactionHistory[rand];
+				
+				if (randomHistory['category']==="Income") {
+				console.log("3")
+				var income = parseInt(randomHistory["amount"]);
+				
+				
+				totalIncome += income;
+				console.log('totalincome' + totalIncome);
+				
+				$(".monthlyIncome").text(totalIncome);
+					
+				}
+				
+				$('.tablelist').after (
+					'<tr><td>' + randomHistory['date'] + '</td><td>' + randomHistory['category'] + '</td> <td>' + randomHistory['method'] + '</td><td>' + randomHistory['tag'] + '</td><td>' + randomHistory['description'] + '</td><td>' + randomHistory['amount'] + '</td></tr>'
+				)
+				
+					//store current index to the html
+					$("#random-history").attr("data-current", rand);
+
+					//show remove button
+					$("#delete").show();
+					updateTransactionHistory(transactionHistory);
+
+				 }
+		} 				
+	}
+            //function-based object Pokemon
+            function Transaction(category, method, description, amount, date, tag) {
+                this.category = category;
+                this.method = method;
+                this.description = description;
+                this.amount = amount;
+				this.date = date;
+                this.tag = tag;
+            }
+
+            $("#transact").submit(function(event) {
+                event.preventDefault();
+				
+                var category = $("#txt-category").val();
+                var method = $("#txt-method").val();
+                var description = $("#txt-description").val();
+                var amount = $("#txt-amount").val();
+				var date= $("#txt-date").val();
+                var tag = $("#txt-tag").val();
+
+                var temp = new Transaction(category, method, description, amount, date, tag);
+
+                storeTransaction(temp);
+				
+				$("#txt-description").val('');
+				$("#txt-amount").val('');
+				$("#txt-tag").val('');
+					
+				$('.tablelist').after (
+				'<tr><td>' + date + '</td><td>' + category + '</td> <td>' + method + '</td><td>' + tag + '</td><td>' + description + '</td><td>' + amount + '</td></tr>'
+				)
+				
+				$("#random-history").html("");
+                $("#status").html("");
+
+            });
+
+            //set and update local storage
+            function storeTransaction(temp) {
+                //check for local storage
+                if (window.localStorage) {
+                    console.log("Local storage available");
+                    var transactionHistory = JSON.parse(localStorage.getItem("transactionHistory"));
+                    if (transactionHistory === null)
+                        transactionHistory = []
+                    transactionHistory.push(temp);
+
+                    updateTransactionHistory(transactionHistory);
+                }
+            }
+
+            function getTransactionHistory() {
+                var transactionHistory;
+                if (window.localStorage) {
+                    transactionHistory = JSON.parse(localStorage.getItem("transactionHistory"));
+                }
+
+                return transactionHistory;
+            }
+
+            function updateTransactionHistory(arr) {
+                localStorage.setItem("transactionHistory", JSON.stringify(arr));
+
+                $("#total").html("<div>Transaction completed</div>");
+            }
+
+            $("#delete").on("click", function(e) {
+				
+				window.parent.location = window.parent.location.href;
+				
+                //get latest retrieved value force integer
+                var latest = parseInt($("#random-transaction").attr("data-current"));
+
+                //get the array of history
+                var transactionHistory = getTransactionHistory();
+                console.log("Selected Transaction: " + latest);
+
+                //delete history based on index. Delete one item
+               transactionHistory.splice(latest, 1);
+
+                updateTransactionHistory(transactionHistory);
+				
+				
+				$("#total").html("<div></div>");
+
+                //reset details
+                $("#random-history").html('');
+            });	
+        });
+
+    </script>	
+    
+    	
+    <script>
+			
+			function myFunction() {
+				// Declare variables
+				var input, filter, table, td, tr, i;
+				input = document.getElementById('search-field');
+				filter = input.value.toUpperCase();
+				table = document.getElementById("tableList");
+				tr = table.getElementsByTagName('tr');
+
+				// Loop through all list items, and hide those who don't match the search query
+				for (i = 0; i < tr.length; i++) {
+					td = tr[i].getElementsByTagName("td")[4];
+				if (td) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}					
+					
+					}
+
+				}
+			}
+					
+	  </script>	
+    			
+    				
+    					
+    						
+    								
+	
+	<div class="header">
+		<div class="nav-bar">
+		  <div class="row">
+			  <div class="col-lg-4" id="navone"><a href="index.html">Overview</a></div>
+			  <div class="col-lg-4" id="navetwo"><a href="transaction.html">Transaction</a></div>
+		  </div>
+        </div>
+  	</div>
+  	
+  	<!-- /end of header -->
+  	
+  	<div id="page-head">
+		<h1>Transaction</h1>
+  	</div>
+  	
+  	<div class="main-body">
+		<div class="holder">
+				<div class="grid_6">
+					<form id="transact" name="transact">
+						<div id="label-cat-met">
+							<div id="label-cat">
+								<label>Category</label>
+									<select id="txt-category" name="txt-category" required>
+										<option value="Expense">Expense</option>
+										<option value="Income">Income</option>
+									</select>								
+							</div>
+							<div id="label-met">	
+								<label>Method</label>
+									<select id="txt-method" name="txt-method" required>
+										<option value="Cash">Cash</option>
+										<option value="Credit Card">Credit Card</option>
+										<option value="Debit Card">Debit Card</option>
+										<option value="Cheque">Cheque</option>
+									</select>									
+							</div>
+						</div>
+						<label>Description</label>
+						<div><input type="text" id="txt-description" name="txt-description" required></div>
+						<label>Amount</label>
+						<div><input type="number" id="txt-amount" name="txt-amount" required></div>
+						<label>Date</label>
+						<div><input type="date" id="txt-date" name="bday" required></div>
+						<label>Tag</label>
+						<div><input type="text" id="txt-tag" name="txt-tag" required></div>
+						<div><input type="submit" value="Transact"></div>
+						<div id="total"></div>
+					</form>
+				</div>
+
+				<div class="grid_6">
+					<div id="random-history" data-current=""></div>
+					<div id="status"></div>
+				</div>
+			</div>
+		<div class="holder2">
+			<div class="btn-search">
+				<input type="submit" value="Search" id="search-btn">	
+				<input type="text" id="search-field"  onKeyUp="myFunction()">
+				<input type="submit" value="Delete Latest Transaction" id="delete">				
+			</div>
+			
+		<table id="myTable">
+			<tr>
+				 <th>Date</th>
+				 <th>category</th> 
+				 <th>method</th>
+				 <th>tag</th>
+				 <th id="header-descrpt">description</th>
+				 <th id="header-amt">amount</th>
+			</tr>
+			<tr class="tablelist">
+ 		 	</tr>
+		</table>
+		</div>
+	</div>	
+  </body>
+  
+<!-- Start Footer -->  
+  
+  <footer>
+   <div class="footer-content">
+     <div class="content">
+   	   	<ul>
+			<li>All rights reserved © | Crafted by Ahmad Muwaffaq</li>
+			<li id="sitemap"><a href="index.html">Home</a> | <a href="transaction.html">Transaction</a></li>
+		 </ul>
+     </div>
+   </div>
+ </footer>
+ 
+ <!-- /end footer -->
+ 
+</html>
